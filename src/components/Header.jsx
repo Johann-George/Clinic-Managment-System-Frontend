@@ -13,7 +13,7 @@ const Header = () => {
             <nav className="nav">
                 <ul>
                     <li>
-                        <Link to="/" className="nav-link">
+                        <Link to="/home" className="nav-link">
                             Home
                         </Link>
                     </li>
