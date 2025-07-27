@@ -65,7 +65,7 @@ body {
     color: var(--primary-color);
 }
 
-.nav {
+.cms-nav {
     display: none;
     position: absolute;
     top: 100%;
@@ -76,11 +76,11 @@ body {
     z-index: 10;
 }
 
-.nav.open {
+.cms-nav.open {
     display: block;
 }
 
-.nav ul {
+.cms-nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -89,7 +89,7 @@ body {
 }
 
 @media (min-width: 1024px) {
-    .nav {
+    .cms-nav {
         display: flex;
         position: static;
         width: auto;
@@ -98,7 +98,7 @@ body {
     }
 }
 
-.nav-link {
+.cms-nav-link {
     display: block;
     text-align: center;
     font-size: 18px;
@@ -108,7 +108,7 @@ body {
     transition: color 0.3s ease;
 }
 
-.nav-link:hover {
+.cms-nav-link:hover {
     color: var(--hover-color);
 }
 
@@ -324,3 +324,76 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transform: translateY(-4px);
 }
+
+ .sign-in-div{
+    font-family: (var(--font-family));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Full viewport height */
+}
+
+.sign-in-form {
+    background-color: #fff;
+    color: var(--primary-color);
+    display: block;
+    padding: 1rem;
+    max-width: 350px;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .sign-in-form-title {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    line-height: 1.75rem;
+    font-weight: 600;
+    text-align: center;
+  }
+  .sign-in-input-container {
+    position: relative;
+  }
+
+  .sign-in-input-container input, .form button {
+    outline: none;
+    border: 1px solid #e5e7eb;
+    margin: 8px 0;
+  }
+
+  .sign-in-input-container input {
+    background-color: #fff;
+    padding: 1rem;
+    padding-right: 3rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    width: 300px;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .sign-in-submit {
+    display: block;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    width: 100%;
+    border-radius: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .signup-link {
+    color: #6B7280;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    text-align: center;
+  }
+
+  .signup-link a {
+    text-decoration: underline;
+  } 

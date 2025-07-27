@@ -10,20 +10,20 @@ const Header = () => {
                 <FontAwesomeIcon icon={faTags} className="fa-icon"/>
                 <span className="brand-title">CMS</span>
             </Link>
-            <nav className="nav">
+            <nav className="cms-nav">
                 <ul>
                     <li>
-                        <Link to="/home" className="nav-link">
+                        <Link to="/home" className="cms-nav-link">
                             Home
                         </Link>
                     </li>
                     <li>
-                        <Link to="/login" className="nav-link">
+                        <Link to="/login" className="cms-nav-link">
                         Login 
                         </Link>
                     </li>
                     <li>
-                        <Link to="/register" className="nav-link">
+                        <Link to="/register" className="cms-nav-link">
                         Register 
                         </Link>
                     </li>
