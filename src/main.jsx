@@ -8,6 +8,8 @@ import Registration from './pages/auth/Registration.jsx'
 import Home from './pages/Home/Home.jsx'
 import ErrorPage from './pages/error/ErrorPage.jsx'
 import DoctorDashboard from './pages/Doctor/DoctorDashboard.jsx'
+import PatientDashboard from './pages/Patient/PatientDashboard.jsx'
+import AdminDashboard from './pages/admin/AdminDashboard.jsx'
 
 const routeDefinitions = createRoutesFromElements(
   <Route path='/' element={<App/>} errorElement={<ErrorPage/>}>
@@ -16,6 +18,8 @@ const routeDefinitions = createRoutesFromElements(
     <Route path="/login" element={<Login/>}/>
     <Route path="/register" element={<Registration/>}/>
     <Route path="/doctor" element={<DoctorDashboard/>}/>
+    <Route path="/patient" element={<PatientDashboard/>}/>
+    <Route path="/admin" element={<AdminDashboard/>}/>
   </Route>
 );
 
