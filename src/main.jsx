@@ -10,6 +10,7 @@ import ErrorPage from './pages/error/ErrorPage.jsx'
 import DoctorDashboard from './pages/Doctor/DoctorDashboard.jsx'
 import PatientDashboard from './pages/Patient/PatientDashboard.jsx'
 import AdminDashboard from './pages/admin/AdminDashboard.jsx'
+import ReceptionistDashboard from './pages/Reception/ReceptionistDashboard.jsx'
 
 const routeDefinitions = createRoutesFromElements(
   <Route path='/' element={<App/>} errorElement={<ErrorPage/>}>
@@ -20,6 +21,7 @@ const routeDefinitions = createRoutesFromElements(
     <Route path="/doctor" element={<DoctorDashboard/>}/>
     <Route path="/patient" element={<PatientDashboard/>}/>
     <Route path="/admin" element={<AdminDashboard/>}/>
+    <Route path="/receptionist" element={<ReceptionistDashboard/>}/>
   </Route>
 );
 

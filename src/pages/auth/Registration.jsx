@@ -7,11 +7,11 @@ function Registration() {
         <form className="row g-3">
           <div className="col-md-4">
             <label htmlFor="validationDefault01" className="form-label">First name</label>
-            <input type="text" className="form-control" id="validationDefault01" value="John" required/>
+            <input type="text" className="form-control" id="validationDefault01" required/>
           </div>
           <div className="col-md-4">
             <label htmlFor="validationDefault02" className="form-label">Last name</label>
-            <input type="text" className="form-control" id="validationDefault02" value="Doe" required/>
+            <input type="text" className="form-control" id="validationDefault02" required/>
           </div>
           <div className="col-md-3">
             <label htmlFor="validationDefault03" className="form-label">Date Of Birth</label>
