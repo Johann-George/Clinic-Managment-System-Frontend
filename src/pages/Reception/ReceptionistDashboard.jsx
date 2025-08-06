@@ -5,15 +5,10 @@ function ReceptionistDashboard() {
     <div className="container mt-4">
       <form className="row g-3">
 
-        {/* Header Section */}
-        
-
-        {/* Patient Registration */}
         <div className="col-4">
           <button type="submit" className="btn btn-primary">Go To Patient Registration</button>
         </div>
 
-        {/* Appointment Booking Section */}
         <div className="col-md-12">
           <label htmlFor="patientUsername" className="form-label">Book Appointment</label>
         </div>

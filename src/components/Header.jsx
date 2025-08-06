@@ -1,8 +1,27 @@
 import { faTags } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 
 const Header = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        const user = localStorage.getItem("user");
+        if(user){
+            setIsLoggedIn(true);
+        } else{
+            setIsLoggedIn(false);
+        }
+    },[]);
+
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        setIsLoggedIn(false);
+        navigate("/login");
+    }
+
     return(
         <header className="header">
             <div className="container">
@@ -17,17 +36,27 @@ const Header = () => {
                             Home
                         </Link>
                     </li>
-                    <li>
-                        <Link to="/login" className="cms-nav-link">
-                        Login 
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="/register" className="cms-nav-link">
-                        Register 
-                        </Link>
-                    </li>
-
+                    {!isLoggedIn ? (
+                        <>
+                            <li>
+                                <Link to="/login" className="cms-nav-link">
+                                Login 
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/register" className="cms-nav-link">
+                                Register 
+                                </Link>
+                            </li>
+                    </>
+                    ):(
+                        <li>
+                            
+                            <button onClick={handleLogout} className="cms-nav-link">
+                                Logout
+                            </button>
+                        </li>
+                    )}
                 </ul>
                 </nav>
             </div>
