@@ -1,5 +1,6 @@
 import Features from "../../components/Features";
 import PageHeading from "../../components/PageHeading";
+import HomePageCard from "../../components/HomePageCard";
 
 PageHeading
 
@@ -8,6 +9,7 @@ const Home = () => {
         <>
             <PageHeading />
             <Features />
+            <HomePageCard />
         </>
     );
 }

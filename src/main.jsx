@@ -14,6 +14,8 @@ import PatientDashboard from './pages/Patient/PatientDashboard.jsx'
 import AdminDashboard from './pages/admin/AdminDashboard.jsx'
 import ReceptionistDashboard from './pages/Reception/ReceptionistDashboard.jsx'
 import { patientRegister } from './pages/auth/Registration.jsx'
+import { staffRegister } from './pages/admin/adminActions.js'
+import { bookAppointment } from './pages/Patient/bookAppointment.js'
 
 const routeDefinitions = createRoutesFromElements(
   <Route path='/' element={<App/>} errorElement={<ErrorPage/>}>
@@ -22,8 +24,8 @@ const routeDefinitions = createRoutesFromElements(
     <Route path="/login" element={<Login/>} action={loginAction}/>
     <Route path="/register" element={<Registration/>} action={patientRegister}/>
     <Route path="/doctor" element={<DoctorDashboard/>}/>
-    <Route path="/patient" element={<PatientDashboard/>}/>
-    <Route path="/admin" element={<AdminDashboard/>}/>
+    <Route path="/patient" element={<PatientDashboard/>} action={bookAppointment}/>
+    <Route path="/admin" element={<AdminDashboard/>} action={staffRegister}/>
     <Route path="/receptionist" element={<ReceptionistDashboard/>}/>
   </Route>
 );

@@ -9,7 +9,7 @@ const Footer = () => {
             icon={faHeart}
             className="footer-icon"
             aria-hidden="true" />
-            by [GroupName]
+            by Group 3
         </footer>
     )
 }

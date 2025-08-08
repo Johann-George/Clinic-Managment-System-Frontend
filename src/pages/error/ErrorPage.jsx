@@ -4,7 +4,7 @@ import { useRouteError } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import PageTitle from '../../components/PageTitle';
-import errorImage from '../../assets/error.jpg'
+import errorImage from '../../assets/error.png'
 import { Link } from 'react-router-dom';
 import './ErrorPage.css'
 

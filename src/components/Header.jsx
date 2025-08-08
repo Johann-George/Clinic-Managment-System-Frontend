@@ -51,10 +51,9 @@ const Header = () => {
                     </>
                     ):(
                         <li>
-                            
-                            <button onClick={handleLogout} className="cms-nav-link">
+                            <Link to="/login" onClick={handleLogout} className="cms-nav-link">
                                 Logout
-                            </button>
+                            </Link>
                         </li>
                     )}
                 </ul>
