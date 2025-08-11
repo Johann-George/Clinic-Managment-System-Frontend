@@ -2,6 +2,7 @@ import React from 'react'
 import patientImg from "../assets/patient.jpeg";
 import doctorImg from "../assets/doctor.jpeg";
 import receptionistImg from "../assets/receptionist.jpeg";
+import { Link } from 'react-router-dom';
 
 function HomePageCard() {
   return (
@@ -21,7 +22,7 @@ function HomePageCard() {
               <p className="card-text text-muted">
                 View schedules, manage patients, and update prescriptions.
               </p>
-              <a href="/login" className="btn btn-primary mt-2">Get Started</a>
+              <Link href="/login" className="btn btn-primary mt-2">Get Started</Link>
             </div>
           </div>
         </div>
@@ -40,7 +41,7 @@ function HomePageCard() {
               <p className="card-text text-muted">
                 Book appointments, check reports, and consult with doctors.
               </p>
-              <a href="/login" className="btn btn-primary mt-2">Get Started</a>
+              <Link href="/login" className="btn btn-primary mt-2">Get Started</Link>
             </div>
           </div>
         </div>
@@ -57,7 +58,7 @@ function HomePageCard() {
               <p className="card-text text-muted">
                 Manage patient registrations, schedule appointments, and update visit records.
               </p>
-              <a href="/login" className="btn btn-primary mt-2">Get Started</a>
+              <Link href="/login" className="btn btn-primary mt-2">Get Started</Link>
             </div>
           </div>
         </div>

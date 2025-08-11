@@ -23,7 +23,7 @@ export default function Login() {
       <Form method="POST" className="sign-in-form">
         <p className="sign-in-form-title">Sign in to your account</p>
         <div className="sign-in-input-container">
-          <input type="text" placeholder="Enter email" name="username" />
+          <input type="text" placeholder="Enter Username" name="username" />
           <span>
           </span>
         </div>

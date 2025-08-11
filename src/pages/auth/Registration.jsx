@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { Form } from 'react-router-dom';
 import apiClient from '../../api/apiClient';
 import { useActionData, useNavigation } from 'react-router-dom';
@@ -6,7 +6,8 @@ import { useEffect,useRef } from 'react';
 import { toast } from 'react-toastify';
 import PageTitle from '../../components/PageTitle';
 
-function Registration() {
+export default function Registration() {
+
   const actionData = useActionData();
   const formRef = useRef(null);
   const navigation = useNavigation();
@@ -69,8 +70,6 @@ function Registration() {
     </>
   ); 
 }
-
-export default Registration
 
 export async function patientRegister({request, params}) {
   const data = await request.formData();

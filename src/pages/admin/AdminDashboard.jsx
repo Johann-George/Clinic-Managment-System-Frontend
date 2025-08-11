@@ -3,6 +3,7 @@ import { Form, useActionData, useNavigation } from "react-router-dom";
 import { toast } from "react-toastify";
 import PageTitle from "../../components/PageTitle";
 import apiClient from "../../api/apiClient";
+import StaffTable from "../../components/StaffTable";
 
 export default function AdminDashboard() {
   const actionData = useActionData();
@@ -10,24 +11,31 @@ export default function AdminDashboard() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [editableData, setEditableData] = useState(null);
-
   const [searchResult, setSearchResult] = useState(null);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [editState, setEditState] = useState({ isEditing: false, data: null });
+
   useEffect(() => {
     if (actionData?.success) {
       formRef.current?.reset();
       toast.success("Staff successfully registered");
     }
-    if (searchResult) {
-      setEditableData({ ...searchResult });
+  }, [actionData]);
+
+  const apiCall = async (requestFn, successMsg) => {
+    try {
+      const res = await requestFn();
+      toast.success(successMsg);
+      return res;
+    } catch (err) {
+      toast.error(err?.message || "Something went wrong");
     }
-  }, [actionData, searchResult]);
+  };
 
   const handleSearch = async (e) => {
     e.preventDefault();
     const staffName = e.target.username.value.trim();
+    if (!staffName) return;
 
     setSearchLoading(true);
     setSearchResult(null);
@@ -43,42 +51,46 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleDelete = async (e) => {
-    e.preventDefault();
-    const staffId = searchResult.staffId;
-    try {
-      await apiClient.delete(`/staff/${staffId}`);
-      toast.success("Staff successfully deleted");
-      return { success: "true" };
-    } catch (error) {
-      throw new Response(
-        error.message || "Failed to submit your message. Please try again.",
-        { status: error.status || 500 }
-      );
-    }
+  const handleDelete = async () => {
+    console.log("Hello");
+    if (!searchResult) return;
+    await apiCall(
+      () => apiClient.delete(`/staff/${searchResult.staffId}`),
+      "Staff successfully deleted"
+    );
+    setSearchResult(null);
+    setEditState({ isEditing: false, data: null });
+  };
+
+  const startEdit = () => {
+    setEditState({ isEditing: true, data: { ...searchResult } });
+  };
+
+  const cancelEdit = () => {
+    setEditState({ isEditing: true, data: { ...searchResult } });
   };
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    setEditableData((prev) => ({
+    setEditState((prev) => ({
       ...prev,
-      [name]: value,
+      data: { ...prev.data, [name]: value },
     }));
   };
 
-  const handleUpdate = async (e) => {
-    const staffId = searchResult.staffId;
-    try {
-      await apiClient.put(`/staff/${staffId}`, editableData);
-      toast.success("Staff details updated correctly");
-      setIsEditing(false);
-      setSearchResult(editableData);
-    } catch (error) {
-      throw new Response(
-        error.message || "Failed to submit your message. Please try again.",
-        { status: error.status || 500 }
-      );
-    }
+  const handleUpdate = async () => {
+    if (!searchResult) return;
+    await apiCall(
+      () => apiClient.put(`/staff/${searchResult.staffId}`, editState.data),
+      "Staff details updated correctly"
+    );
+    setSearchResult(editState.data);
+    setEditState({ isEditing: false, data: null });
+  };
+
+  const handleEditToggle = () => {
+    if (editState.isEditing) handleUpdate();
+    else startEdit();
   };
 
   return (
@@ -184,7 +196,7 @@ export default function AdminDashboard() {
                 <input
                   type="text"
                   className="form-control"
-                  id="validationDefault03"
+                  id="validationDefault06"
                   name="address"
                   required
                 />
@@ -248,125 +260,14 @@ export default function AdminDashboard() {
 
             {/* Display Search Result */}
             {searchResult && (
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">DOB</th>
-                    <th scope="col">Gender</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Designation</th>
-                    <th scope="col">Action 1</th>
-                    <th scope="col">Action 2</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          name="name"
-                          value={editableData.name}
-                          onChange={handleEditChange}
-                          className="form-control"
-                        />
-                      ) : (
-                        searchResult.name
-                      )}
-                    </td>
-                    <td>{searchResult.user.username}</td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          name="dob"
-                          value={editableData.dob}
-                          onChange={handleEditChange}
-                          className="form-control"
-                        />
-                      ) : (
-                        searchResult.dob
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          name="gender"
-                          value={editableData.gender}
-                          onChange={handleEditChange}
-                          className="form-control"
-                        />
-                      ) : (
-                        searchResult.gender
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          name="address"
-                          value={editableData.address}
-                          onChange={handleEditChange}
-                          className="form-control"
-                        />
-                      ) : (
-                        searchResult.address
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          name="designation"
-                          value={editableData.designation}
-                          onChange={handleEditChange}
-                          className="form-control"
-                        />
-                      ) : (
-                        searchResult.designation
-                      )}
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        onClick={handleDelete}
-                        className="btn btn-danger"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (isEditing) handleUpdate();
-                          else setIsEditing(true);
-                        }}
-                        className="btn btn-primary"
-                      >
-                        {isEditing ? "Save" : "Update"}
-                      </button>
-                    </td>
-                    <td>
-                      {isEditing && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setIsEditing(false);
-                            setEditableData({ ...searchResult });
-                          }}
-                          className="btn btn-secondary"
-                        >
-                          Cancel
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <StaffTable
+                data={editState.isEditing ? editState.data : searchResult}
+                isEditing={editState.isEditing}
+                onChange={handleEditChange}
+                onDelete={handleDelete}
+                onEditToggle={handleEditToggle}
+                onCancel={cancelEdit}
+              />
             )}
           </div>
         </div>
