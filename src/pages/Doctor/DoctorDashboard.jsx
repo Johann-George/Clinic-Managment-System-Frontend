@@ -1,8 +1,10 @@
 import React from 'react'
+import PageTitle from '../../components/PageTitle';
 
 function DoctorDashboard() {
     return (
     <>
+        <PageTitle title="Doctor Dashboard" />
         <div className='container mt-5 mb-5'>
             <form className="row g-3">
                 <h4>Conduct Consultation</h4>

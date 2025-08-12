@@ -45,15 +45,18 @@ export default function AdminDashboard() {
       setSearchResult(response.data);
     } catch (error) {
       toast.error("Staff not found or an error occurred");
-      setSearchResult(null);
     } finally {
       setSearchLoading(false);
     }
   };
 
   const handleDelete = async () => {
-    console.log("Hello");
+
     if (!searchResult) return;
+    const confirmed = window.confirm(
+      "Are you sure you want to delete?"
+    );
+    if(!confirmed) return;
     await apiCall(
       () => apiClient.delete(`/staff/${searchResult.staffId}`),
       "Staff successfully deleted"
@@ -67,7 +70,7 @@ export default function AdminDashboard() {
   };
 
   const cancelEdit = () => {
-    setEditState({ isEditing: true, data: { ...searchResult } });
+    setEditState({ isEditing: false, data: null });
   };
 
   const handleEditChange = (e) => {

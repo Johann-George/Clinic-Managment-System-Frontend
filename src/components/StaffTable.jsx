@@ -1,7 +1,7 @@
 import React from "react";
 import EditableCell from "./EditableCell";
 
-function StaffTable({ data, isEditing, onChange, OnDelete, onEditToggle, onCancel}) {
+function StaffTable({ data, isEditing, onChange, onDelete, onEditToggle, onCancel}) {
   return (
     <table className="table">
       <thead>
@@ -62,7 +62,7 @@ function StaffTable({ data, isEditing, onChange, OnDelete, onEditToggle, onCance
           <td>
             <button
               type="button"
-              onClick={OnDelete}
+              onClick={onDelete}
               className="btn btn-danger"
             >
               Delete
