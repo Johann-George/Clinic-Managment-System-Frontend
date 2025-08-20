@@ -15,7 +15,9 @@ export async function bookAppointment({request, params}) {
   };
   try{
     await apiClient.post("/appointment/book",appointmentData)
-    return {success:"true"};
+      .then(response => {
+        alert(`Your Token Number is ${response.data.tokenNo}`);
+      })
   }
   catch(error){
     throw new Response(
