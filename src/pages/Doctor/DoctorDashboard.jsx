@@ -1,15 +1,57 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PageTitle from "../../components/PageTitle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
-import { Form } from "react-router-dom";
+import { Form, useActionData, useNavigation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function DoctorDashboard() {
-  const [valid, setValid] = useState(null);
+  //React Router hooks
+  const actionData = useActionData();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
+  //Form refs
+  const validateFormRef = useRef(null);
+  const consultationFormRef = useRef(null);
+  const historyFormRef = useRef(null);
+
+  //To switch between validate appointment no and conduct consultation
+  const [valid, setValid] = useState(false);
+  const [appointmentId, setAppointmentId] = useState(null);
+
+  //state for medicine rows
   const [rows, setRows] = useState([
     { medicine: "", dosage: "", frequency: "", duration: "" },
   ]);
+
+  //state for lab tests
   const [labTests, setLabTests] = useState([{ testName: "" }]);
+
+  //Handle action data responses
+  useEffect(() => {
+    if(actionData){
+      if(actionData.type === 'validate' && actionData.success){
+        setValid(true);
+        setAppointmentId(actionData.appointmentId);
+        toast.success("Appointment validated successfully");
+        validateFormRef.current?.reset();
+      }
+
+      if(actionData.type==='consultation' && actionData.success){
+        toast.success("Consultation completed successfully");
+        setValid(false);
+        setAppointmentId(null);
+        setRows([{medicine:'',dosage:'',frequency:'',duration:''}]);
+        setLabTests([{testName:''}])
+        consultationFormRef.current?.reset();
+      }
+
+      if(!actionData.success){
+        toast.error(actionData.message || "Operation failed!");
+      }
+    }
+  },[actionData]);
 
   const addRow = () => {
     setRows([
@@ -48,8 +90,9 @@ function DoctorDashboard() {
       <PageTitle title="Doctor Dashboard" />
       <div className='container mt-5 mb-5'>
         {!valid && (
-          <Form method="POST" className="row g-3">
+          <Form method="POST" ref={validateFormRef} className="row g-3">
             <h4>Validate Appointment</h4>
+            <input type="hidden" name="actionType" value="validate"/>
             <div className="col-md-7">
               <label htmlFor="validationDefault02" className="form-label">
                 Appointment Number
@@ -59,10 +102,11 @@ function DoctorDashboard() {
                   type="text"
                   className="form-control"
                   id="validationDefault02"
+                  name="tokenNo"
                   required
                 />
-                <button className="btn btn-primary" type="submit">
-                  Submit 
+                <button className="btn btn-primary" type="submit" disabled={isSubmitting}>
+                  {isSubmitting? 'Validating':'Submit'}
                 </button>
               </div>
             </div>
@@ -70,8 +114,10 @@ function DoctorDashboard() {
         )}
 
         {valid && (
-          <Form method="POST" className="row g-3">
+          <Form method="POST" ref={consultationFormRef} className="row g-3">
             <h4>Conduct Consultation</h4>
+            <input type="hidden" name="actionType" value="consultation"/>
+            <input type="hidden" name="appointmentId" value={appointmentId} />
             <div className="row">
               <div className="col-md-3">
                 <label htmlFor="validationDefault01" className="form-label">
@@ -86,6 +132,7 @@ function DoctorDashboard() {
                     className="form-control"
                     id="validationDefault01"
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
               </div>
@@ -98,9 +145,24 @@ function DoctorDashboard() {
                   className="form-control"
                   id="validationDefault02"
                   required
+                  disabled={isSubmitting}
                 />
               </div>
             </div>
+
+            {rows.map((row,index) => {
+              <div key={'medicine-hidden-${index}'}>
+                <input type="hidden" name={`medicines[${index}].medicine`} value={row.medicine} />
+                <input type="hidden" name={`medicines[${index}].dosage`} value={row.dosage} />
+                <input type="hidden" name={`medicines[${index}].frequency`} value={row.frequency} />
+                <input type="hidden" name={`medicines[${index}].duration`} value={row.duration} />
+              </div>
+            })}
+
+            {labTests.map((test,index)=>{
+              <input key={`test-hidden-${index}`} type="hidden" name={`labTests[${index}].testName`} value={test.testName} />
+            })}
+
             {rows.map((row, index) => (
               <div className="row mb-3" key={index}>
                 <div className="col-md-3">
@@ -115,6 +177,7 @@ function DoctorDashboard() {
                       handleChange(index, "medicine", e.target.value)
                     }
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -128,6 +191,7 @@ function DoctorDashboard() {
                       handleChange(index, "dosage", e.target.value)
                     }
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -141,6 +205,7 @@ function DoctorDashboard() {
                       handleChange(index, "frequency", e.target.value)
                     }
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -154,6 +219,7 @@ function DoctorDashboard() {
                       handleChange(index, "duration", e.target.value)
                     }
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -163,6 +229,7 @@ function DoctorDashboard() {
                       type="button"
                       className="btn btn-primary me-2"
                       onClick={addRow}
+                      disabled={isSubmitting}
                     >
                       <FontAwesomeIcon icon={faPlus} />
                     </button>
@@ -172,6 +239,7 @@ function DoctorDashboard() {
                       type="button"
                       className="btn btn-danger"
                       onClick={() => removeRow(index)}
+                      disabled={isSubmitting}
                     >
                       <FontAwesomeIcon icon={faMinus} />
                     </button>
@@ -191,6 +259,7 @@ function DoctorDashboard() {
                     value={test.testName}
                     onChange={(e) => handleLabTestChange(index, e.target.value)}
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -200,6 +269,7 @@ function DoctorDashboard() {
                       type="button"
                       className="btn btn-primary"
                       onClick={addLabTestRow}
+                      disabled={isSubmitting}
                     >
                       <FontAwesomeIcon icon={faPlus} />
                     </button>
@@ -210,6 +280,7 @@ function DoctorDashboard() {
                       type="button"
                       className="btn btn-danger"
                       onClick={() => removeLabTestRow(index)}
+                      disabled={isSubmitting}
                     >
                       <FontAwesomeIcon icon={faMinus} />
                     </button>
@@ -219,7 +290,7 @@ function DoctorDashboard() {
             ))}
             <div className="col-12 ">
               <button className="btn btn-primary" type="submit">
-                Submit
+                {isSubmitting ? 'Submitting':'Submit'}
               </button>
             </div>
           </Form>
@@ -228,8 +299,9 @@ function DoctorDashboard() {
       </div>
 
       <div className="container mt-5 mb-5">
-        <Form method="GET" className="row g-3">
+        <Form method="GET" ref={historyFormRef} className="row g-3">
           <h4>View Patient History</h4>
+          <input type="hidden" name="actionType" value="history"/>
           <div className="row">
             <div className="col-md-7">
               <div className="input-group">
@@ -243,9 +315,10 @@ function DoctorDashboard() {
                   id="validationDefaultUsername"
                   aria-describedby="inputGroupPrepend2"
                   required
+                  disabled={isSubmitting}
                 />
                 <button className="btn btn-primary" type="submit">
-                  View
+                  {isSubmitting?'Loading':'View'}
                 </button>
               </div>
             </div>
