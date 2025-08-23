@@ -34,7 +34,7 @@ function DoctorDashboard() {
       if(actionData.type === 'validate' && actionData.success){
         setValid(true);
         setAppointmentId(actionData.appointmentId);
-        toast.success("Appointment validated successfully");
+        toast.success(actionData.message);
         validateFormRef.current?.reset();
       }
 
@@ -43,7 +43,8 @@ function DoctorDashboard() {
         setValid(false);
         setAppointmentId(null);
         setRows([{medicine:'',dosage:'',frequency:'',duration:''}]);
-        setLabTests([{testName:''}])
+        setLabTests([{testName:''}]);
+        toast.success(actionData.message);
         consultationFormRef.current?.reset();
       }
 
@@ -131,6 +132,7 @@ function DoctorDashboard() {
                     type="text"
                     className="form-control"
                     id="validationDefault01"
+                    name="patientUsername"
                     required
                     disabled={isSubmitting}
                   />
@@ -144,24 +146,25 @@ function DoctorDashboard() {
                   type="text"
                   className="form-control"
                   id="validationDefault02"
+                  name="diagnosisDetails"
                   required
                   disabled={isSubmitting}
                 />
               </div>
             </div>
 
-            {rows.map((row,index) => {
+            {rows.map((row,index) => (
               <div key={'medicine-hidden-${index}'}>
-                <input type="hidden" name={`medicines[${index}].medicine`} value={row.medicine} />
+                <input type="hidden" name={`medicines[${index}].medicineName`} value={row.medicine} />
                 <input type="hidden" name={`medicines[${index}].dosage`} value={row.dosage} />
                 <input type="hidden" name={`medicines[${index}].frequency`} value={row.frequency} />
                 <input type="hidden" name={`medicines[${index}].duration`} value={row.duration} />
               </div>
-            })}
+            ))}
 
-            {labTests.map((test,index)=>{
-              <input key={`test-hidden-${index}`} type="hidden" name={`labTests[${index}].testName`} value={test.testName} />
-            })}
+            {labTests.map((test,index)=>(
+              <input key={`test-hidden-${index}`} type="hidden" name={`labTests[${index}].labTestName`} value={test.testName} />
+            ))}
 
             {rows.map((row, index) => (
               <div className="row mb-3" key={index}>

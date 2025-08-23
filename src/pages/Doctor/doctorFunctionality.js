@@ -23,8 +23,8 @@ export async function validateAppointmentAction(formData) {
     }
 }
 
-export async function conductConsultationAction({request}) {
-    const formData = await request.formData();
+export async function conductConsultationAction(formData) {
+    console.log([...formData.entries()]);
     
     const appointmentId = formData.get('appointmentId');
     const patientUsername = formData.get('patientUsername');
@@ -32,15 +32,15 @@ export async function conductConsultationAction({request}) {
 
     const medicines = [];
     let medicineIndex = 0;
-    while(formData.get(`medicines[${medicineIndex}].medicine`)) {
-        const medicine = formData.get(`medicines[${medicineIndex}].medicine`);
+    while(formData.get(`medicines[${medicineIndex}].medicineName`)) {
+        const medicineName = formData.get(`medicines[${medicineIndex}].medicineName`);
         const dosage = formData.get(`medicines[${medicineIndex}].dosage`);
         const frequency = formData.get(`medicines[${medicineIndex}].frequency`);
         const duration = formData.get(`medicines[${medicineIndex}].duration`);
 
-        if(medicine && medicine.trim() !== ''){
+        if(medicineName && medicineName.trim() !== ''){
             medicines.push({
-                medicine,
+                medicineName,
                 dosage: dosage,
                 frequency: frequency,
                 duration: duration
@@ -51,10 +51,10 @@ export async function conductConsultationAction({request}) {
 
     const labTests = [];
     let testIndex = 0;
-    while(formData.get(`labTests[${testIndex}].testName`)){
-        const testName = formData.get(`labTests[${testIndex}].testName`);
-        if(testName && testName.trim() !== ''){
-            labTests.push({testName});
+    while(formData.get(`labTests[${testIndex}].labTestName`)){
+        const labTestName = formData.get(`labTests[${testIndex}].labTestName`);
+        if(labTestName && labTestName.trim() !== ''){
+            labTests.push({labTestName});
         }
         testIndex++;
     }
@@ -63,16 +63,16 @@ export async function conductConsultationAction({request}) {
         appointmentId: appointmentId,
         patientUsername,
         diagnosisDetails,
-        prescriptions: medicines,
-        labTests: labTests
+        prescribedMedicines: medicines,
+        prescribedLabTests: labTests
     };
+    console.log(JSON.stringify(consultationData, null, 2));
     try{
         const response = await apiClient.post('/consultation/add', consultationData);
         return {
             type: 'consultation',
             success: true,
-            data: response.data,
-            message: 'Consultation completed successfully'
+            message: response.data.message
         };
     }
     catch(error){
@@ -91,9 +91,9 @@ export async function doctorDashboardAction({request}) {
         case 'validate':
             return validateAppointmentAction(formData);
         case 'consultation':
-            return conductConsultationAction({request});
+            return conductConsultationAction(formData);
         case 'history':
-            return patientHistoryLoader({request});
+            return patientHistoryLoader(formData);
         default:
             return {
                 success: false,
