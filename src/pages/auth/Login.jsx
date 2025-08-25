@@ -11,6 +11,7 @@ export default function Login() {
   
   useEffect(()=>{
     if(actionData?.success){
+      toast.success(actionData.message);
       navigate(actionData.redirectTo, {state: {user: actionData.userDetails}});
     }
     else if(actionData?.errors){
@@ -55,23 +56,23 @@ export async function loginAction({request}) {
     const { message, role, userDetails} = response.data;
     localStorage.setItem("user", JSON.stringify(response.data));
     if(role === "PATIENT"){
-      return { success: true, redirectTo:"/patient", userDetails }
+      return { success: true, redirectTo:"/patient", userDetails, message }
     }
     else if(role === "DOCTOR"){
-      return { success: true, redirectTo:"/doctor", userDetails }
+      return { success: true, redirectTo:"/doctor", userDetails, message }
     }
     else if(role === "RECEPTIONIST"){
-      return { success: true, redirectTo:"/receptionist", userDetails }
+      return { success: true, redirectTo:"/receptionist", userDetails, message }
     }
     else if(role === "ADMIN"){
-      return { success: true, redirectTo:"/admin", userDetails }
+      return { success: true, redirectTo:"/admin", userDetails, message }
     }
   }
   catch(error){
     if(error.response?.status === 401){
       return {
         success: false,
-        errors: { message: "Invalid username or password" },
+        errors: { message: error.response?.data?.message },
       };
     }
     throw new Response(

@@ -16,8 +16,11 @@ export async function staffRegister({request, params}) {
     user: userData
   }
   try{
-    await apiClient.post("staff/register",staffData)
-    return {success:"true"};
+    const response = await apiClient.post("staff/register",staffData)
+    return {
+      success:"true",
+      message: response.data.message
+    };
   }
   catch(error){
     throw new Response(

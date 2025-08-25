@@ -31,7 +31,7 @@ export default function Registration() {
   ); 
 }
 
-export async function patientRegister({request, params}) {
+export async function patientRegister({request}) {
   const data = await request.formData();
   const userData = {
     username: data.get("username"),
