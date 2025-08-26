@@ -76,11 +76,16 @@ export async function conductConsultationAction(formData) {
         };
     }
     catch(error){
-        return{
-            type: 'consultation',
-            success: false,
-            message: error.response?.data?.message || 'Failed to conduct consultation'
-        };
+        if(error.status === 400){
+            return {
+                success : false,
+                errors: error.response?.data
+            }
+        }
+        throw new Response(
+            error.response?.data?.error || "Failed to conduct consultation. Please try again.",
+            { status: error.status || 500 }
+        );
     }
 }
 

@@ -39,7 +39,6 @@ function DoctorDashboard() {
       }
 
       if(actionData.type==='consultation' && actionData.success){
-        toast.success("Consultation completed successfully");
         setValid(false);
         setAppointmentId(null);
         setRows([{medicine:'',dosage:'',frequency:'',duration:''}]);
@@ -120,24 +119,7 @@ function DoctorDashboard() {
             <input type="hidden" name="actionType" value="consultation"/>
             <input type="hidden" name="appointmentId" value={appointmentId} />
             <div className="row">
-              <div className="col-md-3">
-                <label htmlFor="validationDefault01" className="form-label">
-                  Patient Username
-                </label>
-                <div className="input-group">
-                  <span className="input-group-text" id="inputGroupPrepend2">
-                    @
-                  </span>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="validationDefault01"
-                    name="patientUsername"
-                    required
-                    disabled={isSubmitting}
-                  />
-                </div>
-              </div>
+              
               <div className="col-md-6">
                 <label htmlFor="validationDefault02" className="form-label">
                   Diagnosis Details
@@ -150,6 +132,9 @@ function DoctorDashboard() {
                   required
                   disabled={isSubmitting}
                 />
+              {actionData?.errors?.diagnosisDetails && (
+                    <p className="text-danger small mt-1">{actionData.errors.diagnosisDetails}</p>
+              )}
               </div>
             </div>
 
@@ -187,7 +172,7 @@ function DoctorDashboard() {
                 <div className="col-md-2">
                   {index === 0 && <label className="form-label">Dosage</label>}
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
                     value={row.dosage}
                     onChange={(e) =>
@@ -201,7 +186,7 @@ function DoctorDashboard() {
                 <div className="col-md-2">
                   {index === 0 && <label className="form-label">Frequency</label>}
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
                     value={row.frequency}
                     onChange={(e) =>
@@ -215,7 +200,7 @@ function DoctorDashboard() {
                 <div className="col-md-2">
                   {index === 0 && <label className="form-label">Duration</label>}
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
                     value={row.duration}
                     onChange={(e) =>

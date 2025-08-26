@@ -6,6 +6,8 @@ export default function PatientRegister({isSubmitting, formRef}) {
     <>
       <div className="container mt-5 mb-5">
         <Form ref={formRef} method="POST" className="row g-3">
+          <h4>Patient Registration</h4>
+          <input type="hidden" name="actionType" value="register"/>
           <div className="col-md-5">
             <label htmlFor="validationDefault01" className="form-label">
               Full name

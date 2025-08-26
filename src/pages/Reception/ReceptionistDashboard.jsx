@@ -1,25 +1,37 @@
 import React, { useEffect, useRef } from "react";
 import PatientRegister from "../../components/PatientRegister";
-import { useActionData, useNavigation } from "react-router-dom";
+import { Form, useActionData, useNavigation } from "react-router-dom";
 import PageTitle from "../../components/PageTitle";
+import { toast } from "react-toastify";
 
 function ReceptionistDashboard() {
   const actionData = useActionData();
-  const formRef = useRef(null);
+  const registerFormRef = useRef(null);
+  const bookFormRef = useRef(null);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   useEffect(() => {
-    if (actionData?.success) {
-      formRef.current?.reset();
-      toast.success("Patient successfully registered");
+    if (actionData) {
+      if (actionData.type === 'register' && actionData.success) {
+        toast.success(actionData.message);
+        registerFormRef.current?.reset();
+      }
+
+      if (actionData.type === 'book' && actionData.success) {
+        toast.success(actionData.message);
+        bookFormRef.current?.reset();
+        alert(`Your Token Number is ${actionData.tokenNo}`);
+      }
     }
   }, [actionData]);
   return (
     <>
       <PageTitle title="Receptionist Dashboard" />
-      <PatientRegister isSubmitting={isSubmitting} formRef={formRef} />
+      <PatientRegister isSubmitting={isSubmitting} formRef={registerFormRef} />
       <div className="container mt-4">
-        <form className="row g-3">
+        <Form method="POST" ref={bookFormRef} className="row g-3">
+          <h4>Book Appointment</h4>
+          <input type="hidden" name="actionType" value="book" />
           <div className="col-md-6">
             <label htmlFor="doctorUsername" className="form-label">
               Enter Doctor Username
@@ -36,6 +48,9 @@ function ReceptionistDashboard() {
                 required
               />
             </div>
+            {actionData?.errors?.doctorUsername && (
+                <p className="text-danger small mt-1">{actionData.errors.doctorUsername}</p>
+            )}
           </div>
           <div className="col-md-6">
             <label htmlFor="doctorUsername" className="form-label">
@@ -48,11 +63,14 @@ function ReceptionistDashboard() {
               <input
                 type="text"
                 className="form-control"
-                name="doctorUsername"
-                id="doctorUsername"
+                name="patientUsername"
+                id="patientUsername"
                 required
               />
             </div>
+            {actionData?.errors?.patientUsername && (
+                <p className="text-danger small mt-1">{actionData.errors.patientUsername}</p>
+            )}
           </div>
           <div className="col-md-6">
             <label htmlFor="appointmentDate" className="form-label">
@@ -66,6 +84,9 @@ function ReceptionistDashboard() {
               name="appointmentDate"
               required
             />
+            {actionData?.errors?.appointmentDate && (
+                <p className="text-danger small mt-1">{actionData.errors.appointmentDate}</p>
+            )}
           </div>
           <div className="col-md-6">
             <label htmlFor="appointmentTime" className="form-label">
@@ -80,12 +101,15 @@ function ReceptionistDashboard() {
               required
             />
           </div>
+          {actionData?.errors?.appointmentTime && (
+                <p className="text-danger small mt-1">{actionData.errors.appointmentTime}</p>
+          )}
           <div className="col-12">
             <button type="submit" className="btn btn-primary">
-              {isSubmitting ? "Booking" : "Book Appointment"}
+              {isSubmitting ? "Booking" : "Book"}
             </button>
           </div>
-        </form>
+        </Form>
       </div>
     </>
   );
