@@ -27,7 +27,7 @@ function ReceptionistDashboard() {
   return (
     <>
       <PageTitle title="Receptionist Dashboard" />
-      <PatientRegister isSubmitting={isSubmitting} formRef={registerFormRef} />
+      <PatientRegister isSubmitting={isSubmitting} formRef={registerFormRef} actionData={actionData}/>
       <div className="container mt-4">
         <Form method="POST" ref={bookFormRef} className="row g-3">
           <h4>Book Appointment</h4>

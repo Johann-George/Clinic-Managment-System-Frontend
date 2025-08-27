@@ -26,6 +26,7 @@ export default function Registration() {
       <PatientRegister 
         isSubmitting = {isSubmitting}
         formRef = {formRef}
+        actionData = {actionData}
       />
     </>
   ); 
@@ -50,6 +51,16 @@ export async function patientRegister({request}) {
     return {success:"true"};
   }
   catch(error){
-    toast.error(error?.message || "Something went wrong");
+    if(error.status === 400){
+      console.log("Entered here")
+      return {
+        success : false,
+        errors: error.response?.data
+      }
+    }
+    throw new Response(
+      error.message || "Failed to submit your message. Please try again.",
+      { status: error.status || 500 }
+    );
   }
 }

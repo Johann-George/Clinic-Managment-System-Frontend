@@ -23,6 +23,12 @@ export async function staffRegister({request, params}) {
     };
   }
   catch(error){
+    if(error.status === 400){
+        return {
+            success : false,
+            errors: error.response?.data
+        }
+    }
     throw new Response(
       error.message || "Failed to submit your message. Please try again.",
       { status: error.status || 500 }

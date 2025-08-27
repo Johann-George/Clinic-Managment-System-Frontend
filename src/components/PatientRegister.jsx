@@ -1,7 +1,7 @@
 import React from "react";
 import { Form } from "react-router-dom";
 
-export default function PatientRegister({isSubmitting, formRef}) {
+export default function PatientRegister({isSubmitting, formRef, actionData}) {
   return (
     <>
       <div className="container mt-5 mb-5">
@@ -19,6 +19,9 @@ export default function PatientRegister({isSubmitting, formRef}) {
               name="fullName"
               required
             />
+            {actionData?.errors?.name && (
+              <p className="text-danger small mt-1">{actionData.errors.name}</p>
+            )}
           </div>
           <div className="col-md-5">
             <label htmlFor="validationDefault02" className="form-label">
@@ -31,6 +34,9 @@ export default function PatientRegister({isSubmitting, formRef}) {
               name="dob"
               required
             />
+            {actionData?.errors?.dob && (
+                    <p className="text-danger small mt-1">{actionData.errors.dob}</p>
+            )}
           </div>
           <div className="col-md-4">
             <label htmlFor="validationDefaultUsername" className="form-label">
@@ -49,6 +55,9 @@ export default function PatientRegister({isSubmitting, formRef}) {
                 required
               />
             </div>
+            {actionData?.errors?.["user.username"] && (
+                <p className="text-danger small mt-1">{actionData.errors["user.username"]}</p>
+            )}
           </div>
           <div className="col-md-4">
             <label htmlFor="validationDefault03" className="form-label">
@@ -60,7 +69,11 @@ export default function PatientRegister({isSubmitting, formRef}) {
               id="inputPassword4"
               name="password"
               placeholder="Password"
+              required
             />
+            {actionData?.errors?.["user.password"] && (
+              <p className="text-danger small mt-1">{actionData.errors["user.password"]}</p>
+            )}
           </div>
           <div className="col-md-3">
             <label htmlFor="validationDefault04" className="form-label">
@@ -79,6 +92,9 @@ export default function PatientRegister({isSubmitting, formRef}) {
               <option>MALE</option>
               <option>FEMALE</option>
             </select>
+            {actionData?.errors?.gender && (
+              <p className="text-danger small mt-1">{actionData.errors.gender}</p>
+            )}
           </div>
 
           <div className="col-md-6">
@@ -92,6 +108,9 @@ export default function PatientRegister({isSubmitting, formRef}) {
               name="address"
               required
             />
+            {actionData?.errors?.address && (
+              <p className="text-danger small mt-1">{actionData.errors.address}</p>
+            )}
           </div>
           <div className="col-md-3">
             <label htmlFor="validationDefault06" className="form-label">
@@ -105,6 +124,9 @@ export default function PatientRegister({isSubmitting, formRef}) {
               pattern="[0-9]{10}"
               required
             />
+            {actionData?.errors?.contactNo && (
+              <p className="text-danger small mt-1">{actionData.errors.contactNo}</p>
+            )}
           </div>
           <div className="col-12 ">
             <button

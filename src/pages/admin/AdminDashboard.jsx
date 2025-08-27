@@ -115,6 +115,9 @@ export default function AdminDashboard() {
                   name="fullName"
                   required
                 />
+                {actionData?.errors?.name && (
+                  <p className="text-danger small mt-1">{actionData.errors.name}</p>
+                )}
               </div>
               <div className="col-md-4">
                 <label htmlFor="validationDefault02" className="form-label">
@@ -127,6 +130,9 @@ export default function AdminDashboard() {
                   name="dob"
                   required
                 />
+                {actionData?.errors?.dob && (
+                  <p className="text-danger small mt-1">{actionData.errors.dob}</p>
+                )}
               </div>
               <div className="col-md-4">
                 <label htmlFor="validationDefault03" className="form-label">
@@ -137,8 +143,12 @@ export default function AdminDashboard() {
                   className="form-control"
                   id="validationDefault03"
                   name="contactNo"
+                  pattern="[0-9]{10}"
                   required
                 />
+                {actionData?.errors?.contactNo && (
+                  <p className="text-danger small mt-1">{actionData.errors.contactNo}</p>
+                )}
               </div>
               <div className="col-md-4">
                 <label
@@ -157,9 +167,14 @@ export default function AdminDashboard() {
                     id="validationDefaultUsername"
                     name="username"
                     aria-describedby="inputGroupPrepend2"
+                    minLength={3}
+                    maxLength={10}
                     required
                   />
                 </div>
+                {actionData?.errors?.["user.username"] && (
+                  <p className="text-danger small mt-1">{actionData.errors["user.username"]}</p>
+                )}
               </div>
               <div className="col-md-4">
                 <label htmlFor="validationDefault04" className="form-label">
@@ -171,7 +186,13 @@ export default function AdminDashboard() {
                   id="inputPassword4"
                   name="password"
                   placeholder="Password"
+                  minLength={5}
+                  maxLength={15}
+                  required
                 />
+                {actionData?.errors?.["user.password"] && (
+                  <p className="text-danger small mt-1">{actionData.errors["user.password"]}</p>
+                )}
               </div>
               <div className="col-md-4">
                 <label htmlFor="validationDefault05" className="form-label">
@@ -190,6 +211,9 @@ export default function AdminDashboard() {
                   <option>MALE</option>
                   <option>FEMALE</option>
                 </select>
+                {actionData?.errors?.gender && (
+                  <p className="text-danger small mt-1">{actionData.errors.gender}</p>
+                )}
               </div>
 
               <div className="col-md-6">
@@ -203,6 +227,9 @@ export default function AdminDashboard() {
                   name="address"
                   required
                 />
+                {actionData?.errors?.address && (
+                  <p className="text-danger small mt-1">{actionData.errors.address}</p>
+                )}
               </div>
               <div className="col-md-5">
                 <label htmlFor="validationDefault07" className="form-label">
@@ -221,6 +248,9 @@ export default function AdminDashboard() {
                   <option>Doctor</option>
                   <option>Receptionist</option>
                 </select>
+                {actionData?.errors?.designation && (
+                  <p className="text-danger small mt-1">{actionData.errors.designation}</p>
+                )}
               </div>
 
               <div className="col-12 ">
