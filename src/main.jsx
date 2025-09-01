@@ -18,6 +18,8 @@ import { staffRegister } from './pages/admin/adminActions.js'
 import { bookAppointment } from './pages/Patient/bookAppointment.js'
 import { doctorDashboardAction } from './pages/Doctor/doctorFunctionality.js'
 import { receptionistDashboardAction } from './pages/Reception/receptionistFunctionality.js'
+import { AuthProvider } from './store/auth-context.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 const routeDefinitions = createRoutesFromElements(
   <Route path='/' element={<App/>} errorElement={<ErrorPage/>}>
@@ -25,10 +27,12 @@ const routeDefinitions = createRoutesFromElements(
     <Route path="/home" element={<Home/>}/>
     <Route path="/login" element={<Login/>} action={loginAction}/>
     <Route path="/register" element={<Registration/>} action={patientRegister}/>
-    <Route path="/doctor" element={<DoctorDashboard/>} action={doctorDashboardAction}/>
-    <Route path="/patient" element={<PatientDashboard/>} action={bookAppointment}/>
-    <Route path="/admin" element={<AdminDashboard/>} action={staffRegister}/>
-    <Route path="/receptionist" element={<ReceptionistDashboard/>} action={receptionistDashboardAction}/>
+    <Route element={<ProtectedRoute/>}>
+      <Route path="/doctor" element={<DoctorDashboard/>} action={doctorDashboardAction}/>
+      <Route path="/patient" element={<PatientDashboard/>} action={bookAppointment}/>
+      <Route path="/admin" element={<AdminDashboard/>} action={staffRegister}/>
+      <Route path="/receptionist" element={<ReceptionistDashboard/>} action={receptionistDashboardAction}/>
+    </Route>
   </Route>
 );
 
@@ -36,7 +40,9 @@ const appRouter = createBrowserRouter(routeDefinitions);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={appRouter} />
+    <AuthProvider>
+      <RouterProvider router={appRouter} />
+    </AuthProvider>
     <ToastContainer
       position="top-center"
       autoClose={3000}

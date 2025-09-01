@@ -2,14 +2,13 @@ import apiClient from "../../api/apiClient";
 
 export async function bookAppointment({request}) {
   const userData = JSON.parse(localStorage.getItem("user"));
-  const userDetails = userData?.userDetails?.user;
-  if (!userDetails && !userDetails.username) {
+  if (!userData && !userData.name) {
     throw new Response("Patient details missing from localStorage", { status: 400 });
   }
   const data = await request.formData();
   const appointmentData = {
     doctorUsername: data.get("doctorUsername"),
-    patientUsername: userDetails.username,
+    patientUsername: userData.name,
     appointmentDate: data.get("appointmentDate"),
     appointmentTime: data.get("appointmentTime")
   };

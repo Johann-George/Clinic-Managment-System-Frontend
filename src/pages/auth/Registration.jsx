@@ -1,5 +1,4 @@
 import React from 'react';
-import { Form } from 'react-router-dom';
 import apiClient from '../../api/apiClient';
 import { useActionData, useNavigation } from 'react-router-dom';
 import { useEffect,useRef } from 'react';
@@ -47,7 +46,7 @@ export async function patientRegister({request}) {
     user: userData
   }
   try{
-    await apiClient.post("patient/register",patientData)
+    await apiClient.post("auth/register",patientData)
     return {success:"true"};
   }
   catch(error){
