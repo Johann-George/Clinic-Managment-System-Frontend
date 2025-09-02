@@ -46,7 +46,7 @@ export async function patientRegister({request}) {
     user: userData
   }
   try{
-    await apiClient.post("auth/register",patientData)
+    await apiClient.post("/auth/register",patientData)
     return {success:"true"};
   }
   catch(error){

@@ -22,7 +22,7 @@ function HomePageCard() {
               <p className="card-text text-muted">
                 View schedules, manage patients, and update prescriptions.
               </p>
-              <Link href="/login" className="btn btn-primary mt-2">Get Started</Link>
+              <Link to="/doctor" className="btn btn-primary mt-2">Get Started</Link>
             </div>
           </div>
         </div>
@@ -41,7 +41,7 @@ function HomePageCard() {
               <p className="card-text text-muted">
                 Book appointments, check reports, and consult with doctors.
               </p>
-              <Link href="/login" className="btn btn-primary mt-2">Get Started</Link>
+              <Link to="/patient" className="btn btn-primary mt-2">Get Started</Link>
             </div>
           </div>
         </div>
@@ -58,7 +58,7 @@ function HomePageCard() {
               <p className="card-text text-muted">
                 Manage patient registrations, schedule appointments, and update visit records.
               </p>
-              <Link href="/login" className="btn btn-primary mt-2">Get Started</Link>
+              <Link to="/receptionist" className="btn btn-primary mt-2">Get Started</Link>
             </div>
           </div>
         </div>

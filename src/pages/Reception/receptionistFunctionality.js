@@ -14,7 +14,7 @@ export async function patientRegister(data) {
     user: userData
   }
   try{
-    const response = await apiClient.post("patient/register",patientData);
+    const response = await apiClient.post("/auth/register",patientData);
     return {
         type: 'register',
         success:true,

@@ -17,8 +17,8 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (actionData?.success) {
-      formRef.current?.reset();
       toast.success(actionData.message);
+      formRef.current?.reset();
     }
   }, [actionData]);
 

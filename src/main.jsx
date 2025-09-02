@@ -27,10 +27,16 @@ const routeDefinitions = createRoutesFromElements(
     <Route path="/home" element={<Home/>}/>
     <Route path="/login" element={<Login/>} action={loginAction}/>
     <Route path="/register" element={<Registration/>} action={patientRegister}/>
-    <Route element={<ProtectedRoute/>}>
+    <Route element={<ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}/>}>
       <Route path="/doctor" element={<DoctorDashboard/>} action={doctorDashboardAction}/>
+    </Route>
+    <Route element={<ProtectedRoute allowedRoles={["ROLE_PATIENT"]}/>}>
       <Route path="/patient" element={<PatientDashboard/>} action={bookAppointment}/>
+    </Route>
+    <Route element={<ProtectedRoute allowedRoles={["ROLE_ADMIN"]}/>}>
       <Route path="/admin" element={<AdminDashboard/>} action={staffRegister}/>
+    </Route>
+    <Route element={<ProtectedRoute allowedRoles={["ROLE_RECEPTIONIST"]}/>}>
       <Route path="/receptionist" element={<ReceptionistDashboard/>} action={receptionistDashboardAction}/>
     </Route>
   </Route>
