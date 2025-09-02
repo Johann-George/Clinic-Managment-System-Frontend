@@ -7,20 +7,49 @@ import StaffTable from "../../components/StaffTable";
 
 export default function AdminDashboard() {
   const actionData = useActionData();
-  const formRef = useRef(null);
+  const addFormRef = useRef(null);
+  const searchFormRef = useRef(null);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
   const [searchResult, setSearchResult] = useState(null);
   const [searchLoading, setSearchLoading] = useState(false);
-  const [editState, setEditState] = useState({ isEditing: false, data: null });
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    dob: "",
+    contactNo: "",
+    username: "",
+    password: "",
+    gender: "",
+    address: "",
+    designation: ""
+  })
+  //const [editState, setEditState] = useState({ isEditing: false, data: null });
 
   useEffect(() => {
     if (actionData?.success) {
       toast.success(actionData.message);
-      formRef.current?.reset();
+      clearForm();
+      //formRef.current?.reset();
     }
   }, [actionData]);
+
+  const clearForm = () => {
+    setFormData({
+      name: "",
+      dob: "",
+      contactNo: "",
+      username: "",
+      password: "",
+      gender: "",
+      address: "",
+      designation: ""
+    });
+    setSearchResult(null);
+    setIsEditMode(false);
+    addFormRef.current?.reset();
+  };
 
   const apiCall = async (requestFn, successMsg) => {
     try {
@@ -42,59 +71,92 @@ export default function AdminDashboard() {
 
     try {
       const response = await apiClient.get(`/staff/${staffName}`);
-      setSearchResult(response.data);
+      const staffData = response.data;
+
+      setFormData({
+        name : staffData.name || "",
+        dob: staffData.dob || "",
+        contactNo: staffData.contactNo || "",
+        username: staffData.user.username || "",
+        password: "", // Don't populate password for security
+        gender: staffData.gender || "",
+        address: staffData.address || "",
+        designation: staffData.designation || ""
+      });
+      setSearchResult(staffData);
+      setIsEditMode(true);
+      toast.success("Staff found!");
     } catch (error) {
       toast.error("Staff not found or an error occurred");
     } finally {
       setSearchLoading(false);
+      searchFormRef.current?.reset();
     }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleDelete = async () => {
 
     if (!searchResult) return;
     const confirmed = window.confirm(
-      "Are you sure you want to delete?"
+      "Are you sure you want to delete ${searchResult.name}?"
     );
-    if(!confirmed) return;
+
+    if (!confirmed) return;
+
     await apiCall(
       () => apiClient.delete(`/staff/${searchResult.staffId}`),
       "Staff successfully deleted"
     );
-    setSearchResult(null);
-    setEditState({ isEditing: false, data: null });
+    clearForm();
+    //setSearchResult(null);
+    //setEditState({ isEditing: false, data: null });
   };
 
-  const startEdit = () => {
-    setEditState({ isEditing: true, data: { ...searchResult } });
-  };
+  const handleUpdate = async (e) => {
+    e.preventDefault();
 
-  const cancelEdit = () => {
-    setEditState({ isEditing: false, data: null });
-  };
-
-  const handleEditChange = (e) => {
-    const { name, value } = e.target;
-    setEditState((prev) => ({
-      ...prev,
-      data: { ...prev.data, [name]: value },
-    }));
-  };
-
-  const handleUpdate = async () => {
     if (!searchResult) return;
-    await apiCall(
-      () => apiClient.put(`/staff/${searchResult.staffId}`, editState.data),
+
+    //const updateData = { ...formData };
+    const userData = {
+      username: formData.username,
+    }
+    const updateData = {
+      name : formData.name,
+      dob: formData.dob,
+      gender: formData.gender,
+      address: formData.address,
+      designation: formData.designation,
+      contactNo: formData.contactNo,
+      user: userData
+    }
+    
+    const success = await apiCall(
+      () => apiClient.put(`/staff/${searchResult.staffId}`, updateData),
       "Staff details updated correctly"
     );
-    setSearchResult(editState.data);
-    setEditState({ isEditing: false, data: null });
+    if (success) {
+      setSearchResult({ ...searchResult, ...updateData });
+    }
+    clearForm();
+    //setSearchResult(editState.data);
+    //setEditState({ isEditing: false, data: null });
   };
 
-  const handleEditToggle = () => {
-    if (editState.isEditing) handleUpdate();
-    else startEdit();
+  const handleCancelEdit = () => {
+    clearForm();
+    toast.info("Edit cancelled");
   };
+
+  const handleFormSubmit = isEditMode ? handleUpdate : undefined;
 
   return (
     <>
@@ -102,8 +164,36 @@ export default function AdminDashboard() {
       <div className="container mt-5 mb-5">
         <div className="row">
           <div className="col-12">
-            <Form ref={formRef} method="POST" className="g-3 row">
-              <h4>Add Staff</h4>
+            <div className="d-flex justify-content-between align-items-center">
+              <h4>{isEditMode ? "Edit Staff" : "Add Staff"}</h4>
+              <div className="d-flex align-items-center gap-3">
+                <Form method="GET" ref={searchFormRef} onSubmit={handleSearch} className="d-flex align-items-center">
+                  <div className="input-group" >
+                    <input
+                      className="form-control"
+                      type="search"
+                      placeholder="Enter Staff Username"
+                      name="username"
+                      aria-label="Search"
+                    />
+                    <button
+                      className="btn btn-outline-success"
+                      type="submit"
+                      disabled={searchLoading}
+                    >
+                      {searchLoading ? "..." : "Search"}
+                    </button>
+                  </div>
+                </Form>
+                {isEditMode && (
+                  <div>
+                    <button type="button" className="btn btn-danger me-2" onClick={handleDelete}>Delete Staff</button>
+                    <button type="button" className="btn btn-secondary" onClick={handleCancelEdit}>Cancel Edit</button>
+                  </div>
+                )}
+              </div>
+            </div>
+            <Form ref={addFormRef} method={isEditMode ? "GET" : "POST"} onSubmit={handleFormSubmit} className="g-3 row">
               <div className="col-md-4">
                 <label htmlFor="validationDefault01" className="form-label">
                   Full name
@@ -112,7 +202,9 @@ export default function AdminDashboard() {
                   type="text"
                   className="form-control"
                   id="validationDefault01"
-                  name="fullName"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
                   required
                 />
                 {actionData?.errors?.name && (
@@ -128,6 +220,8 @@ export default function AdminDashboard() {
                   className="form-control"
                   id="validationDefault02"
                   name="dob"
+                  value={formData.dob}
+                  onChange={handleInputChange}
                   required
                 />
                 {actionData?.errors?.dob && (
@@ -144,6 +238,8 @@ export default function AdminDashboard() {
                   id="validationDefault03"
                   name="contactNo"
                   pattern="[0-9]{10}"
+                  value={formData.contactNo}
+                  onChange={handleInputChange}
                   required
                 />
                 {actionData?.errors?.contactNo && (
@@ -169,6 +265,8 @@ export default function AdminDashboard() {
                     aria-describedby="inputGroupPrepend2"
                     minLength={3}
                     maxLength={10}
+                    value={formData.username}
+                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -178,17 +276,20 @@ export default function AdminDashboard() {
               </div>
               <div className="col-md-4">
                 <label htmlFor="validationDefault04" className="form-label">
-                  Password
+                  Password {isEditMode && <small className="text-muted">(password is hidden for security reasons)</small>}
                 </label>
                 <input
                   type="password"
                   className="form-control"
                   id="inputPassword4"
                   name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
                   placeholder="Password"
                   minLength={5}
                   maxLength={15}
-                  required
+                  required={!isEditMode}
+                  disabled={isEditMode}
                 />
                 {actionData?.errors?.["user.password"] && (
                   <p className="text-danger small mt-1">{actionData.errors["user.password"]}</p>
@@ -202,6 +303,8 @@ export default function AdminDashboard() {
                   className="form-select"
                   id="validationDefault04"
                   name="gender"
+                  value={formData.gender}
+                  onChange={handleInputChange}
                   required
                   defaultValue=""
                 >
@@ -225,6 +328,8 @@ export default function AdminDashboard() {
                   className="form-control"
                   id="validationDefault06"
                   name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
                   required
                 />
                 {actionData?.errors?.address && (
@@ -239,6 +344,8 @@ export default function AdminDashboard() {
                   className="form-select"
                   id="validationDefault07"
                   name="designation"
+                  value={formData.designation}
+                  onChange={handleInputChange}
                   required
                   defaultValue=""
                 >
@@ -256,52 +363,16 @@ export default function AdminDashboard() {
               <div className="col-12 ">
                 <button
                   disabled={isSubmitting}
-                  className="btn btn-primary"
+                  className={`btn ${isEditMode ? "btn-success" : "btn-primary"}`}
                   type="submit"
                 >
-                  {isSubmitting ? "Registering" : "Register"}
+                  {isSubmitting ?
+                    (isEditMode ? "Updating..." : "Registering...") :
+                    (isEditMode ? "Update Staff" : "Register Staff")
+                  }
                 </button>
               </div>
             </Form>
-          </div>
-        </div>
-      </div>
-      <div className="container mt-5 mb-5">
-        <div className="row">
-          <div className="col-12">
-            <Form method="GET" onSubmit={handleSearch} className="g-3 row">
-              <h4>Search Staff</h4>
-              <div className="col-md-8">
-                <input
-                  className="form-control"
-                  type="search"
-                  placeholder="Enter Staff Username"
-                  name="username"
-                  aria-label="Search"
-                />
-              </div>
-              <div className="col-md-2">
-                <button
-                  className="btn btn-outline-success w-90"
-                  type="submit"
-                  disabled={searchLoading}
-                >
-                  {searchLoading ? "Searching..." : "Search"}
-                </button>
-              </div>
-            </Form>
-
-            {/* Display Search Result */}
-            {searchResult && (
-              <StaffTable
-                data={editState.isEditing ? editState.data : searchResult}
-                isEditing={editState.isEditing}
-                onChange={handleEditChange}
-                onDelete={handleDelete}
-                onEditToggle={handleEditToggle}
-                onCancel={cancelEdit}
-              />
-            )}
           </div>
         </div>
       </div>

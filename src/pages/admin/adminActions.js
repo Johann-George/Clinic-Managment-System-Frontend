@@ -1,13 +1,13 @@
 import apiClient from "../../api/apiClient";
 
-export async function staffRegister({request, params}) {
+export async function staffRegister({request}) {
   const data = await request.formData();
   const userData = {
     username: data.get("username"),
     password: data.get("password")
   }
   const staffData = {
-    name : data.get("fullName"),
+    name : data.get("name"),
     dob: data.get("dob"),
     gender: data.get("gender"),
     address: data.get("address"),
