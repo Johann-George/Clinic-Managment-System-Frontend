@@ -89,8 +89,8 @@ export default function PatientRegister({isSubmitting, formRef, actionData}) {
               <option value="" disabled>
                 Choose...
               </option>
-              <option>MALE</option>
-              <option>FEMALE</option>
+              <option>Male</option>
+              <option>Female</option>
             </select>
             {actionData?.errors?.gender && (
               <p className="text-danger small mt-1">{actionData.errors.gender}</p>

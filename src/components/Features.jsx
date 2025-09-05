@@ -5,10 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function Features() {
     const features = [
-        "Experienced Staff",
-        "24/7 Support",
-        "Digital Records",
-        "Secure Billing"
+        "Online Appointment Booking",
+        "Role Based Access Control",
+        "Data Security",
     ];
 
   return (
