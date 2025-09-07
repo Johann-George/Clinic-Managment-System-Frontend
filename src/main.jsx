@@ -18,8 +18,9 @@ import { staffRegister } from './pages/admin/adminActions.js'
 import { bookAppointment } from './pages/Patient/bookAppointment.js'
 import { doctorDashboardAction } from './pages/Doctor/doctorFunctionality.js'
 import { receptionistDashboardAction } from './pages/Reception/receptionistFunctionality.js'
-import { AuthProvider } from './store/auth-context.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
+import { Provider } from 'react-redux'
+import store from './store/store.js'
 
 const routeDefinitions = createRoutesFromElements(
   <Route path='/' element={<App/>} errorElement={<ErrorPage/>}>
@@ -46,9 +47,9 @@ const appRouter = createBrowserRouter(routeDefinitions);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthProvider>
+    <Provider store={store}>
       <RouterProvider router={appRouter} />
-    </AuthProvider>
+    </Provider>
     <ToastContainer
       position="top-center"
       autoClose={3000}

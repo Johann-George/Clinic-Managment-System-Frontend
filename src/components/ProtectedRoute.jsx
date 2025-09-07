@@ -1,9 +1,12 @@
 import React, {useEffect} from 'react'
-import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { useAuth } from '../store/auth-context'
+import { Navigate, Outlet} from 'react-router-dom'
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated,selectUser} from "../store/auth-slice"
 
 function ProtectedRoute({allowedRoles}) {
-    const {isAuthenticated, user} = useAuth();
+    console.log(allowedRoles);
+    const isAuthenticated = useSelector(selectIsAuthenticated);
+    const user = useSelector(selectUser);
 
     if(!isAuthenticated){
         return <Navigate to="/login"/>
