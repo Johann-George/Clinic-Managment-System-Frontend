@@ -1,17 +1,14 @@
-import { faAngleDown, faTags } from "@fortawesome/free-solid-svg-icons"
+import { faTags } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useEffect, useState } from "react"
 import { useSelector,useDispatch } from "react-redux"
-import { selectIsAuthenticated,selectUser,logout } from "../store/auth-slice"
+import { selectIsAuthenticated,logout } from "../store/auth-slice"
 import { Link, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 
 function Header() {
     const navigate = useNavigate();
-    //const { isAuthenticated, logout } = useAuth();
     const dispatch = useDispatch();
     const isAuthenticated = useSelector(selectIsAuthenticated);
-    const user = useSelector(selectUser);
 
     const handleLogout = (e) => {
         e.preventDefault();

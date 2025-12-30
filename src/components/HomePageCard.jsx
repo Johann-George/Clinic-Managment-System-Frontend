@@ -12,7 +12,7 @@ function HomePageCard() {
         <div className="col-md-6 col-lg-4 mb-4">
           <div className="card shadow border-0 rounded-4 h-100">
             <img 
-            src={doctorImg}
+              src={doctorImg}
               alt="Doctor" 
               className="card-img-top rounded-top-4"
               style={{ objectFit: 'cover', height: '200px' }}

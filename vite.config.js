@@ -12,7 +12,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ["react","react-dom"],
-          //redux: ["@reduxjs/toolkit","react-redux"],
+          redux: ["@reduxjs/toolkit","react-redux"],
           router: ["react-router-dom"],
           ui: [
             "@fortawesome/react-fontawesome",

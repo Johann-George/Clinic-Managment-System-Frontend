@@ -10,6 +10,7 @@ function ReceptionistDashboard() {
   const bookFormRef = useRef(null);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
+
   useEffect(() => {
     if (actionData) {
       if (actionData.type === 'register' && actionData.success) {
@@ -24,6 +25,7 @@ function ReceptionistDashboard() {
       }
     }
   }, [actionData]);
+
   return (
     <>
       <PageTitle title="Receptionist Dashboard" />
